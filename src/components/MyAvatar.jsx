@@ -5,6 +5,8 @@ Command: npx gltfjsx@6.1.4 public/models/myAvatar.glb
 
 import React, { useEffect, useRef } from "react";
 import { useAnimations, useGLTF, useFBX } from "@react-three/drei";
+import { useCharacterAnimations } from "../contexts/CharacterAnimation";
+import { act } from "@react-three/fiber";
 
 const MyAvatar = (props) => {
   const group = useRef();
@@ -14,22 +16,27 @@ const MyAvatar = (props) => {
   const { animations: dancingAnimation } = useFBX("animations/Dancing.fbx");
   const { animations: capoeiraAnimation } = useFBX("animations/Capoeira.fbx");
 
+  const { setAnimations } = useCharacterAnimations(animations, group);
   standingAnimation[0].name = "Standing";
   dancingAnimation[0].name = "Dancing";
   capoeiraAnimation[0].name = "Capoeira";
 
   const { actions, names } = useAnimations(
-    [dancingAnimation[0],  capoeiraAnimation[0],standingAnimation[0]],
+    [dancingAnimation[0], capoeiraAnimation[0], standingAnimation[0]],
     group
   );
 
   useEffect(() => {
+    setAnimations(names);
+  }, [names]);
+
+  useEffect(() => {
     actions[names[0]].reset().fadeIn(0.5).play();
   }, []);
-
+  // rotation-x={-Math.PI / 2}
   return (
     <group ref={group} {...props} dispose={null}>
-      <group rotation-x={-Math.PI / 2}>
+      <group>
         <primitive object={nodes.Hips} />
         <skinnedMesh
           castShadow
