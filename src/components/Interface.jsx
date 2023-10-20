@@ -8,7 +8,7 @@ const Interface = () => {
       <Affix position={{ bottom: rem(20), right: rem(20) }}>
         <Stack>
           {animations.map((animation, index) => {
-            <Button key={animation} variant={index == animationIndex = "filled" : "light"}>{animation}</Button>;
+            <Button key={animation} variant={index == animationIndex ? "filled" : "light"}>{animation}</Button>;
           })}
         </Stack>
       </Affix>
